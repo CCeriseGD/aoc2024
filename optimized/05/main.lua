@@ -1,4 +1,4 @@
---assumes that every pair elements in each list has a rule (apparently true for all inputs)
+--assumes that every pair of elements in each list has a rule (apparently true for all inputs)
 local total1, total2 = 0, 0
 local rules = {}
 function iscorrect(t)
