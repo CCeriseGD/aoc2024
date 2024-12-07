@@ -10,15 +10,16 @@ for line in love.filesystem.lines("input") do
         if #totals == 0 then
             table.insert(t, {n, false})
         else
-            for i = 1, #totals do
-                local vadd = totals[i][1] + n
-                local vmul = totals[i][1] * n
-                local vconcat = tonumber(totals[i][1] .. n)
+            for i, v in ipairs(totals) do
+                local val = v[1]
+                local vadd = val + n
+                local vmul = val * n
+                local vconcat = val * 10 ^ #m + n
                 if vadd <= testvalue then
-                    table.insert(t, {vadd, totals[i][2]})
+                    table.insert(t, {vadd, v[2]})
                 end
                 if vmul <= testvalue then
-                    table.insert(t, {vmul, totals[i][2]})
+                    table.insert(t, {vmul, v[2]})
                 end
                 if vconcat <= testvalue then
                     table.insert(t, {vconcat, true})
