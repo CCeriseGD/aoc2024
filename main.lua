@@ -12,6 +12,18 @@ function runday(n)
     print(string.format("finished in %s", timestr))
 end
 function love.load(args)
-    runday(args[1])
+    if args[1] == "all" then
+        local t = {}
+        for i, f in ipairs(love.filesystem.getDirectoryItems("solutions")) do
+            table.insert(t, tonumber(f:match("(.+)%.lua")))
+        end
+        table.sort(t)
+        for i, day in ipairs(t) do
+            print("\nday "..day)
+            runday(day)
+        end
+    else
+        runday(args[1])
+    end
 end
 love.event.quit()
