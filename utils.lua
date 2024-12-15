@@ -2,6 +2,9 @@ input = {}
 function input.lines()
     return love.filesystem.lines(input.file)
 end
+function input.match(pattern)
+    return love.filesystem.read(input.file):match(pattern)
+end
 function input.linematch(pattern)
     local linesf, s, var = love.filesystem.lines(input.file)
     return function(s, var)
@@ -17,6 +20,30 @@ function input.grid(charcallback)
     local g = grid()
     local x, y = 0, 0
     for line in input.lines() do
+        y = y + 1
+        x = 0
+        for c in line:gmatch(".") do
+            x = x + 1
+            if charcallback then
+                local v = charcallback(x, y, c)
+                if v ~= nil then
+                    g:set(x, y, v)
+                else
+                    g:set(x, y, c)
+                end
+            else
+                g:set(x, y, c)
+            end
+        end
+    end
+    g:setsize(x, y)
+    return g
+end
+
+function gridfromstring(s, charcallback)
+    local g = grid()
+    local x, y = 0, 0
+    for line in s:gmatch("[^\n]+") do
         y = y + 1
         x = 0
         for c in line:gmatch(".") do
@@ -93,6 +120,19 @@ function grid(w, h, indef, outdef)
                 end
                 return s.x, s.y, self:get(s.x, s.y)
             end, s
+        end,
+        print = function(self, charfunc)
+            for y = 1, self.h do
+                local line = ""
+                for x = 1, self.w do
+                    local c = self:get(x, y)
+                    if charfunc then
+                        c = charfunc(x, y, c) or c
+                    end
+                    line = line..c
+                end
+                print(line)
+            end
         end
     }
     g.w, g.h, g.indef, g.outdef = w, h, indef, outdef
