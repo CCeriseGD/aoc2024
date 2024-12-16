@@ -55,7 +55,6 @@ pg:set(goalx, goaly, true)
 local total2 = 1
 while #open > 0 do
     local x, y, idx = unpack(open[1])
-    print(x, y)
     table.remove(open, 1)
     for i, v in ipairs(path:get(x, y)[idx]) do
         local px, py, pidx = unpack(v)
