@@ -71,6 +71,12 @@ end
 function output.part2(n)
     print("part 2:", string.format("%d", n))
 end
+function output.part1s(n)
+    print("part 1:", n)
+end
+function output.part2s(n)
+    print("part 2:", n)
+end
 
 function defaulttable(def)
     local t = {}
