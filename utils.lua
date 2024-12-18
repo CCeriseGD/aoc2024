@@ -139,6 +139,35 @@ function grid(w, h, indef, outdef)
                 end
                 print(line)
             end
+        end,
+        pathfind = function(self, sx, sy, ex, ey, getadj, heuristic, getpath)
+            local open = {{sx, sy, 0, 0, {}}}
+            local closed = grid(self.w, self.h)
+            while #open > 0 do
+                table.sort(open, function(p1, p2)
+                    return p1[4] < p2[4]
+                end)
+                local nx, ny, d, _, path = unpack(open[1])
+                table.remove(open, 1)
+                closed:set(nx, ny, true)
+                for i, v in ipairs(getadj(self, nx, ny)) do
+                    if not closed:get(v[1], v[2]) then
+                        local newpath
+                        if getpath then
+                            newpath = {}
+                            for j, w in ipairs(path) do
+                                newpath[j] = {unpack(w)}
+                            end
+                            table.insert(newpath, {v[1], v[2]})
+                        end
+                        if v[1] == ex and v[2] == ey then
+                            return d+1, newpath
+                        end
+                        table.insert(open, {v[1], v[2], d+1, d+1 + heuristic(self, v[1], v[2], ex, ey), newpath})
+                    end
+                end
+            end
+            return false
         end
     }
     g.w, g.h, g.indef, g.outdef = w, h, indef, outdef
