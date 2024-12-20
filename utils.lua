@@ -141,7 +141,7 @@ function grid(w, h, indef, outdef)
             end
         end,
         pathfind = function(self, sx, sy, ex, ey, getadj, heuristic, getpath)
-            local open = {{sx, sy, 0, 0, {}}}
+            local open = {{sx, sy, 0, 0, {{sx, sy}}}}
             local closed = grid(self.w, self.h)
             while #open > 0 do
                 table.sort(open, function(p1, p2)
@@ -161,9 +161,9 @@ function grid(w, h, indef, outdef)
                             table.insert(newpath, {v[1], v[2]})
                         end
                         if v[1] == ex and v[2] == ey then
-                            return d+1, newpath
+                            return d+(v[3] or 1), newpath
                         end
-                        table.insert(open, {v[1], v[2], d+1, d+1 + heuristic(self, v[1], v[2], ex, ey), newpath})
+                        table.insert(open, {v[1], v[2], d+(v[3] or 1), d+(v[3] or 1) + heuristic(self, v[1], v[2], ex, ey), newpath})
                     end
                 end
             end
