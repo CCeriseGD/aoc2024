@@ -173,3 +173,5 @@ function grid(w, h, indef, outdef)
     g.w, g.h, g.indef, g.outdef = w, h, indef, outdef
     return g
 end
+
+memoize = require "memoize"
